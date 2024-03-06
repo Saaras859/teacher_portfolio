@@ -1,15 +1,12 @@
 ---
+title: Database Get Method 
 layout: base
-title: Python JWT Login 
-hide: true
-description: This fetches a Python RESTful API Get method to return a table 
-permalink: /python/database
+description: This fetches a Java RESTful API Get method to return a table 
+permalink: /java/database
 ---
 
-## SQL Database Fetch (Python)
-
-<!-- HTML table layout for page.  The table is filled by JavaScript below. 
--->
+## SQL Database Fetch (Java)
+<!-- HTML table fragment for page -->
 <table>
   <thead>
   <tr>
@@ -23,26 +20,40 @@ permalink: /python/database
   </tbody>
 </table>
 
-<!-- 
-Below JavaScript code fetches user data from an API and displays it in a table. It uses the Fetch API to make a GET request to the '/api/users/' endpoint.   Refer to config.js to see additional options. 
-
-The script is laid out in a sequence (no function) and will execute when page is loaded.
--->
-<script type="module">
-  // uri variable and options object are obtained from config.js
-  import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
-
-  // Set Users endpoint (list of users)
-  const url = uri + '/api/users/';
-
-  // prepare HTML result container for new output
+<!-- Script sequence (has no function) and will execute when the page is loaded -->
+<script>
+  // Prepare HTML result container for new output
   const resultContainer = document.getElementById("result");
 
+  // URI identifies the resource
+  let URI = '';
+  if (location.hostname === "localhost") {
+      URI = "http://localhost:8085";
+  } else if (location.hostname === "127.0.0.1") {
+          URI = "http://127.0.0.1:8085";
+  } else {
+          URI = "https://spring.nighthawkcodingsociety.com";
+  }
+  // URL identifies the web address login
+  // prepare URL
+  const URL = URI + '/api/person/';
+
+  // Set options for cross-origin header request
+  const options = {
+    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'include', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
   // fetch the API
-  fetch(url, options)
+  fetch(URL, options)
     // response is a RESTful "promise" on any successful fetch
     .then(response => {
-      // check for response errors and display
+      // Check for response errors and display
       if (response.status !== 200) {
           const errorMsg = 'Database response error: ' + response.status;
           console.log(errorMsg);
@@ -64,13 +75,13 @@ The script is laid out in a sequence (no function) and will execute when page is
             const age = document.createElement("td");
             // data is specific to the API
             name.innerHTML = row.name; 
-            id.innerHTML = row.uid; 
+            id.innerHTML = row.email; 
             age.innerHTML = row.age; 
-            // this builds td's into tr
+            // this build td's into tr
             tr.appendChild(name);
             tr.appendChild(id);
             tr.appendChild(age);
-            // append the row to table
+            // add HTML to container
             resultContainer.appendChild(tr);
           }
       })
